@@ -28,8 +28,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -69,4 +67,9 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Animasi halus saat hover card */
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
 }
