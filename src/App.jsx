@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import useTheme from './hooks/useTheme';
 import LoginPage from './pages/LoginPage'; // Import Login
 import QuizPage from './pages/QuizPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -20,6 +22,8 @@ function App() {
           <Routes>
             {/* Halaman Utama adalah Login */}
             <Route path="/" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             
             {/* Halaman Kuis */}
             <Route path="/quiz" element={<QuizPage />} />

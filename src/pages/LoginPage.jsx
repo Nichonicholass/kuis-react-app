@@ -1,61 +1,65 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Button from '../components/Button';
-import { saveUser, getUser } from '../utils/storage';
+import { login } from '../services/authService'; // Import Service Baru
+import toast, { Toaster } from 'react-hot-toast'; // Opsional: Kalau mau notif keren
 
 function LoginPage() {
-  const [name, setName] = useState('');
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Cek kalau user sebenarnya sudah login, langsung lempar ke kuis
-  useEffect(() => {
-    const user = getUser();
-    if (user) {
-      navigate('/quiz');
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!formData.username || !formData.password) return;
+
+    setLoading(true);
+    const result = await login(formData.username, formData.password);
+    
+    if (result.success) {
+      toast.success('Login Berhasil!');
+      navigate('/dashboard'); // Arahkan ke Dashboard, bukan langsung Kuis
+    } else {
+      toast.error(result.message);
+      setLoading(false);
     }
-  }, [navigate]);
-
-  const handleLogin = (e) => {
-    e.preventDefault(); // Mencegah reload halaman
-    if (!name.trim()) return;
-
-    saveUser(name); // Simpan nama
-    navigate('/quiz'); // Pindah ke halaman kuis
   };
 
   return (
     <div className="w-full max-w-md mx-auto animate-fade-in-up">
+      <Toaster position="top-center" />
       <div className="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-xl border-t-4 border-primary">
-        
-        <h2 className="text-3xl font-bold text-center mb-2 text-gray-800 dark:text-white">
-          Selamat Datang! 👋
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-white">
+          Login Akun
         </h2>
-        <p className="text-center text-gray-500 dark:text-gray-400 mb-8">
-          Siap menguji wawasanmu hari ini?
-        </p>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-              Nama Peserta
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Masukkan namamu..."
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 
-                         dark:bg-dark-bg dark:text-white focus:border-primary focus:ring-2 
-                         focus:ring-orange-200 focus:outline-none transition-all font-medium"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Username"
+            value={formData.username}
+            onChange={(e) => setFormData({...formData, username: e.target.value})}
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:bg-dark-bg dark:border-gray-600 dark:text-white"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={(e) => setFormData({...formData, password: e.target.value})}
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:bg-dark-bg dark:border-gray-600 dark:text-white"
+          />
           
-          <Button type="submit" className="w-full mt-4 py-3 text-lg shadow-orange-500/20">
-            Mulai Kuis 🚀
+          <Button type="submit" className="w-full mt-2" disabled={loading}>
+            {loading ? 'Memproses...' : 'Masuk 🚀'}
           </Button>
         </form>
 
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          Belum punya akun?{' '}
+          <Link to="/register" className="text-primary font-bold hover:underline">
+            Daftar disini
+          </Link>
+        </p>
       </div>
     </div>
   );
