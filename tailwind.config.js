@@ -41,11 +41,16 @@ export default {
         popIn: {
           '0%': { opacity: '0', transform: 'scale(0.5)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        slideUpFade: {
+          '0%': { opacity: '0', transform: 'translateY(40px) scale(0.95)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
         }
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
-        'pop-in': 'popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards', // Efek membal (bouncy)
+        'pop-in': 'popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+        'card-entrance': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       }
     },
   },

@@ -6,6 +6,7 @@ import Layout from './components/Layout'; // Import Layout yang baru
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import QuizPage from './pages/QuizPage';
+import CustomToaster from './components/Toaster';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -13,6 +14,8 @@ function App() {
 
   return (
     // Kita hapus div pembungkus di sini karena sudah ada di Layout
+    <>
+    <CustomToaster />
     <Routes>
       
       {/* BUNGKUS SEMUA PAGE DENGAN LAYOUT */}
@@ -28,6 +31,8 @@ function App() {
       {/* Jika nanti ada halaman 404 (Not Found), taruh di luar Layout atau di dalamnya bebas */}
     
     </Routes>
+    </>
+
   );
 }
 
