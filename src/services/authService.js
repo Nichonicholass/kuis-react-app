@@ -1,68 +1,55 @@
-const KEY_USERS = 'app_users_db'; // "Tabel" Users
-const KEY_SESSION = 'app_session_user'; // "Session" User yg login
+const KEY_USERS = 'app_users_db'; 
+const KEY_SESSION = 'app_session_user'; 
 
-// Helper: Ambil semua user dari LocalStorage
+// Helper: Ambil data
 const getUsers = () => {
   const data = localStorage.getItem(KEY_USERS);
   return data ? JSON.parse(data) : [];
 };
 
-// 1. REGISTER
-export const register = async (username, password) => {
-  // Simulasi delay network biar kerasa kayak real app
+// 1. LOGIN (Sekaligus Auto-Register)
+export const login = async (username) => {
+  // Simulasi loading sebentar biar kerasa 'proses'nya
   await new Promise(resolve => setTimeout(resolve, 500));
 
-  const users = getUsers();
+  let users = getUsers();
+  
+  // Cari user berdasarkan nama (case insensitive)
+  let user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
-  // Cek apakah username sudah ada?
-  if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-    return { success: false, message: 'Username sudah terpakai!' };
+  // Kalo user GAK ADA, kita buatkan otomatis (Auto-Register)
+  if (!user) {
+    user = {
+      username, // Nama asli (misal: Nicholas)
+      joinedAt: new Date().toISOString(),
+      history: [] 
+    };
+    users.push(user);
+    localStorage.setItem(KEY_USERS, JSON.stringify(users));
   }
 
-  // Buat user baru (Password plain text gapapa untuk mock)
-  const newUser = {
-    username,
-    password, 
-    joinedAt: new Date().toISOString(),
-    history: [] // Tempat simpan riwayat kuis nanti
-  };
-
-  users.push(newUser);
-  localStorage.setItem(KEY_USERS, JSON.stringify(users));
+  // Set Session (Login Berhasil)
+  localStorage.setItem(KEY_SESSION, user.username);
   
   return { success: true };
 };
 
-// 2. LOGIN
-export const login = async (username, password) => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const users = getUsers();
-  const user = users.find(u => u.username === username && u.password === password);
-
-  if (user) {
-    localStorage.setItem(KEY_SESSION, username); // Set Session
-    return { success: true, user };
-  }
-
-  return { success: false, message: 'Username atau Password salah!' };
-};
-
-// 3. LOGOUT
+// 2. LOGOUT
 export const logout = () => {
   localStorage.removeItem(KEY_SESSION);
 };
 
-// 4. GET CURRENT USER (Profile & History)
+// 3. GET CURRENT USER
 export const getCurrentUser = () => {
   const username = localStorage.getItem(KEY_SESSION);
   if (!username) return null;
 
   const users = getUsers();
+  // Kita cari usernya lagi buat ambil data history terbaru
   return users.find(u => u.username === username) || null;
 };
 
-// 5. SAVE GAME HISTORY (Fitur Penting!)
+// 4. SAVE GAME HISTORY
 export const saveGameToHistory = (gameResult) => {
   const currentUser = localStorage.getItem(KEY_SESSION);
   if (!currentUser) return;
@@ -70,10 +57,9 @@ export const saveGameToHistory = (gameResult) => {
   const users = getUsers();
   const updatedUsers = users.map(user => {
     if (user.username === currentUser) {
-      // Tambahkan hasil game ke array history user ini
       return { 
         ...user, 
-        history: [gameResult, ...user.history] // Taruh paling atas (terbaru)
+        history: [gameResult, ...user.history] 
       };
     }
     return user;

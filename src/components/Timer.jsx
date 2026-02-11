@@ -18,7 +18,7 @@ function Timer({ duration, onTimeUp, timeUsed }) {
         ${duration < 10 ? 'text-red-500 animate-pulse' : 'text-gray-700 dark:text-gray-200'}`}>
         {formatTime(duration)}
       </div>
-      <p className="text-xs text-gray-500 mt-1">Sisa Waktu</p>
+      <p className="text-xs text-gray-500 mt-1">Remaining Time</p>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import Button from './Button';
-import { decodeHtml } from '../utils/decoder'; // Import lagi decodernya
+import { decodeHtml } from '../utils/decoder';
 
-function QuizCard({ questionData, onAnswerClick }) {
-  
+function QuizCard({ questionData, onAnswerClick, isExiting }) {
+  if (!questionData) return null;
   // 1. Gabungkan & Acak Jawaban
   const shuffledAnswers = useMemo(() => {
     const answers = [
@@ -14,42 +14,39 @@ function QuizCard({ questionData, onAnswerClick }) {
   }, [questionData]);
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 rounded-xl shadow-lg transition-colors duration-300 
-                    bg-white dark:bg-dark-card dark:border dark:border-gray-700">
-      
-      {/* Header Kategori */}
-      <div className="flex justify-between text-sm mb-4 font-bold tracking-wide">
-        <span className="text-primary dark:text-orange-300">
-           {/* DECODE DISINI */}
-           {decodeHtml(questionData.category)}
-        </span>
-        
-        <span className={`px-2 py-1 rounded text-white text-xs capitalize ${
-          questionData.difficulty === 'easy' ? 'bg-green-500' : 
-          questionData.difficulty === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
-        }`}>
-          {questionData.difficulty}
-        </span>
+    <div 
+      className={`w-full max-w-3xl mx-auto mt-6 transition-all duration-300 ease-in-out transform
+        ${isExiting ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'}
+      `}
+    >
+      {/* Container Soal */}
+      <div className="bg-white dark:bg-dark-card p-8 rounded-3xl shadow-xl border-b-4 border-gray-100 dark:border-gray-700 mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold leading-tight text-gray-800 dark:text-white text-center">
+          {decodeHtml(questionData.question)}
+        </h2>
       </div>
 
-      {/* Soal */}
-      <h2 className="text-xl font-semibold mb-6 leading-relaxed text-gray-800 dark:text-white">
-        {/* DECODE DISINI (Penting banget karena soal sering ada tanda kutip) */}
-        {decodeHtml(questionData.question)}
-      </h2>
-
-      {/* Pilihan Jawaban */}
-      <div className="grid grid-cols-1 gap-3">
+      {/* Grid Jawaban */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {shuffledAnswers.map((answer, index) => (
-          <Button
+          <button
             key={index}
             onClick={() => onAnswerClick(answer)}
-            variant="outline"
-            className="w-full text-left justify-start !font-medium py-4 border-2 hover:bg-orange-50 dark:hover:bg-gray-700"
+            className="group relative w-full p-5 rounded-2xl bg-white dark:bg-dark-card border-2 border-gray-200 dark:border-gray-700 
+                       hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-gray-800
+                       active:scale-[0.98] transition-all duration-200 text-left shadow-sm hover:shadow-md"
           >
-            {/* DECODE DISINI JUGA */}
-            {decodeHtml(answer)}
-          </Button>
+            <div className="flex items-center gap-4">
+              {/* Huruf Pilihan (A/B/C/D) - Opsional biar keren */}
+              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 font-bold flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                {String.fromCharCode(65 + index)}
+              </div>
+              
+              <span className="text-lg font-medium text-gray-700 dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+                {decodeHtml(answer)}
+              </span>
+            </div>
+          </button>
         ))}
       </div>
     </div>
