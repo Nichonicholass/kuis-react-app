@@ -22,7 +22,6 @@ export const clearGameState = (username) => {
   localStorage.removeItem(key);
 };
 
-// --- HELPER: Hitung Skor Give Up ---
 export const calculateGiveUpScore = (gameState) => {
   if (!gameState) return null;
 
@@ -30,7 +29,7 @@ export const calculateGiveUpScore = (gameState) => {
 
   return {
     date: new Date().toISOString(),
-    score: score.correct * 10,
+    score: score.correct * 20,
     correct: score.correct,
     wrong: score.wrong + (gameState.questions.length - (score.correct + score.wrong)),
     status: 'Gave Up',
