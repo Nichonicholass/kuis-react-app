@@ -107,8 +107,7 @@ function QuizPage() {
   );
 
   useEffect(() => {
-    if (user && !loading && questions.length > 0 && !isFinished && endTime) {
-      
+    if (user?.username && !loading && questions.length > 0 && !isFinished && endTime) {
       const currentSecondsLeft = Math.ceil((endTime - Date.now()) / 1000);
       
       saveGameState(user.username, {
@@ -119,8 +118,27 @@ function QuizPage() {
         categoryId,
       });
     }
-  }, [questions, currentIndex, score, loading, isFinished, categoryId, user, endTime]);
+  }, [questions, currentIndex, score, loading, isFinished, categoryId, user?.username, endTime]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (!user?.username || !endTime || isFinished) return;
+
+      const currentSecondsLeft = Math.ceil((endTime - Date.now()) / 1000);
+      
+      saveGameState(user.username, {
+        questions,
+        currentIndex,
+        score,
+        timeLeft: currentSecondsLeft,
+        categoryId,
+      });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [user?.username, endTime, isFinished, questions, currentIndex, score, categoryId]);
 
   useEffect(() => {
     if (loading || isFinished || !endTime) return;
