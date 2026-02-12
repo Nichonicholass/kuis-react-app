@@ -15,7 +15,7 @@ export const fetchQuestions = async (amount = 10, difficulty = 'medium', categor
 
     return response.data.results;
   } catch (error) {
-    console.error("Error fetching questions:", error);
+    console.error('Error fetching questions:', error);
     throw error;
   }
 };

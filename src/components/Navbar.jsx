@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { LogOut, Sun, Moon, Brain } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Button from "./Button";
+import Button from './Button';
 import { getCurrentUser, logout } from '../services/authService';
 
 function Navbar({ toggleTheme, isDark }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = getCurrentUser(); 
+  const user = getCurrentUser();
 
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -42,7 +42,7 @@ function Navbar({ toggleTheme, isDark }) {
   const isLoginPage = location.pathname === '/';
 
   return (
-    <nav 
+    <nav
       className={`
         w-full px-6 py-4 flex justify-between items-center 
         bg-white/90 dark:bg-dark-card/90 backdrop-blur-md shadow-sm 
@@ -51,7 +51,6 @@ function Navbar({ toggleTheme, isDark }) {
         ${showNavbar ? 'translate-y-0' : '-translate-y-full'}
       `}
     >
-      
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white shadow-orange-200">
           <Brain size={20} />
@@ -60,9 +59,9 @@ function Navbar({ toggleTheme, isDark }) {
           React<span className="text-orange-500">Quiz</span>
         </h1>
       </div>
-      
+
       <div className="flex items-center gap-3">
-        <Button 
+        <Button
           onClick={toggleTheme}
           className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
@@ -72,9 +71,9 @@ function Navbar({ toggleTheme, isDark }) {
         {user && !isLoginPage && (
           <>
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-1 hidden sm:block"></div>
-            <Button 
-              onClick={handleLogout} 
-              variant="outline" 
+            <Button
+              onClick={handleLogout}
+              variant="outline"
               className="!py-2 !px-4 text-sm flex items-center gap-2 border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 dark:border-red-900/30 dark:hover:bg-red-900/20"
             >
               <LogOut size={16} />

@@ -3,15 +3,12 @@ import { decodeHtml } from '../utils/decoder';
 function QuizCard({ questionData, onAnswerClick, isExiting }) {
   if (!questionData) return null;
 
-  const answers = [
-    ...questionData.incorrect_answers,
-    questionData.correct_answer
-  ];
+  const answers = [...questionData.incorrect_answers, questionData.correct_answer];
 
   if (answers.length === 0) return null;
 
   return (
-    <div 
+    <div
       className={`w-full max-w-3xl mx-auto mt-6 transition-all duration-300 ease-in-out transform ${
         isExiting ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'
       }`}
@@ -37,7 +34,7 @@ function QuizCard({ questionData, onAnswerClick, isExiting }) {
                        text-left shadow-sm hover:shadow-md"
           >
             <div className="flex items-center gap-4">
-              <div 
+              <div
                 className="flex-shrink-0 w-10 h-10 rounded-lg 
                            bg-gray-100 dark:bg-gray-700 
                            text-gray-500 dark:text-gray-300 
@@ -47,8 +44,8 @@ function QuizCard({ questionData, onAnswerClick, isExiting }) {
               >
                 {String.fromCharCode(65 + index)}
               </div>
-              
-              <span 
+
+              <span
                 className="text-lg font-medium text-gray-700 dark:text-gray-200 
                            group-hover:text-orange-600 dark:group-hover:text-orange-400 
                            transition-colors"

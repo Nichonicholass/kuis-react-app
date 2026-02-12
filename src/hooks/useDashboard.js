@@ -23,8 +23,8 @@ export const useDashboard = () => {
 
   return {
     user,
-    setUser, 
+    setUser,
     handleLogout,
-    handleStartQuiz
+    handleStartQuiz,
   };
 };

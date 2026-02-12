@@ -13,14 +13,14 @@ function App() {
 
   return (
     <>
-    <CustomToaster />
-    <Routes>
-      <Route element={<Layout toggleTheme={toggleTheme} isDark={isDark} />}>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/quiz" element={<QuizPage />} />
-      </Route>
-    </Routes>
+      <CustomToaster />
+      <Routes>
+        <Route element={<Layout toggleTheme={toggleTheme} isDark={isDark} />}>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+        </Route>
+      </Routes>
     </>
   );
 }

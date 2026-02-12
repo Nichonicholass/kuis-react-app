@@ -7,12 +7,16 @@ function CategoryCard({ category, onClick }) {
                  hover:border-primary/50 hover:shadow-xl hover:-translate-y-2 
                  transition-all duration-300 w-full overflow-hidden"
     >
-      <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${category.color.split(' ')[0]}`} />
-      <div className={`
+      <div
+        className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${category.color.split(' ')[0]}`}
+      />
+      <div
+        className={`
         w-14 h-14 rounded-full flex items-center justify-center text-3xl mb-3 
         shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3
         ${category.color}
-      `}>
+      `}
+      >
         {category.icon}
       </div>
       <span className="font-bold text-gray-700 dark:text-gray-200 text-base text-center z-10">

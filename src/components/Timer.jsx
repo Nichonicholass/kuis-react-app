@@ -7,18 +7,14 @@ function Timer({ duration }) {
 
   return (
     <div className="flex flex-col items-center mb-6">
-      <div 
+      <div
         className={`text-2xl font-bold font-mono tracking-widest transition-colors ${
-          duration < 10 
-            ? 'text-red-500 animate-pulse' 
-            : 'text-gray-700 dark:text-gray-200'
+          duration < 10 ? 'text-red-500 animate-pulse' : 'text-gray-700 dark:text-gray-200'
         }`}
       >
         {formatTime(duration)}
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-        Remaining Time
-      </p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Remaining Time</p>
     </div>
   );
 }

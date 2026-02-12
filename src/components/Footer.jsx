@@ -5,9 +5,7 @@ function Footer() {
         <span>
           &copy; 2026 <b>ReactQuiz</b>. All rights reserved.
         </span>
-        <span className="flex items-center gap-1">
-         Built with React + Vite
-        </span>
+        <span className="flex items-center gap-1">Built with React + Vite</span>
       </div>
     </footer>
   );

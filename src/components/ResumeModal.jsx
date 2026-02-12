@@ -5,7 +5,7 @@ import { CATEGORIES } from '../constants/categories';
 function ResumeModal({ isOpen, data, onResume, onGiveUp }) {
   if (!isOpen || !data) return null;
 
-  const category = CATEGORIES.find(c => c.id === data.categoryId); 
+  const category = CATEGORIES.find((c) => c.id === data.categoryId);
   const currentQuestion = data.currentIndex + 1;
   const totalQuestions = data.questions.length;
 
@@ -24,8 +24,10 @@ function ResumeModal({ isOpen, data, onResume, onGiveUp }) {
           </p>
           <div className="w-full bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-4 mb-6 border border-gray-100 dark:border-gray-700">
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${category.color.replace('text-', 'text-opacity-80 text-')}`}>
-                {category.icon} 
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center ${category.color.replace('text-', 'text-opacity-80 text-')}`}
+              >
+                {category.icon}
               </div>
               <div className="text-left">
                 <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">Topic</p>
@@ -39,43 +41,46 @@ function ResumeModal({ isOpen, data, onResume, onGiveUp }) {
                 <div className="text-left">
                   <p className="text-xs text-gray-400">Question</p>
                   <p className="font-bold text-gray-800 dark:text-white text-sm">
-                    {currentQuestion} <span className="text-gray-400 font-normal">/ {totalQuestions}</span>
+                    {currentQuestion}{' '}
+                    <span className="text-gray-400 font-normal">/ {totalQuestions}</span>
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <Clock size={18} className={data.timeLeft < 10 ? "text-red-500" : "text-green-500"} />
+                <Clock
+                  size={18}
+                  className={data.timeLeft < 10 ? 'text-red-500' : 'text-green-500'}
+                />
                 <div className="text-left">
                   <p className="text-xs text-gray-400">Time Left</p>
-                  <p className={`font-bold text-sm ${data.timeLeft < 10 ? "text-red-500" : "text-green-600"}`}>
+                  <p
+                    className={`font-bold text-sm ${data.timeLeft < 10 ? 'text-red-500' : 'text-green-600'}`}
+                  >
                     {data.timeLeft}s
                   </p>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Buttons */}
           <div className="flex gap-3 w-full">
-            <Button 
-              onClick={onGiveUp} 
-              variant="outline" 
+            <Button
+              onClick={onGiveUp}
+              variant="outline"
               className="flex-1 border-red-200 text-red-500 hover:bg-red-50 text-sm"
             >
               Give Up
             </Button>
-            <Button 
-              onClick={onResume} 
+            <Button
+              onClick={onResume}
               className="flex-1 bg-orange-500 hover:bg-orange-600 text-white text-sm"
             >
               Resume Quiz
             </Button>
           </div>
-
         </div>
-
       </div>
     </div>
   );

@@ -6,8 +6,8 @@ function CustomToaster({ offset = 90 }) {
   const isDark = theme === 'dark';
 
   return (
-    <Toaster 
-      position="top-center" 
+    <Toaster
+      position="top-center"
       reverseOrder={false}
       containerStyle={{
         top: offset,

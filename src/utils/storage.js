@@ -27,12 +27,12 @@ export const calculateGiveUpScore = (gameState) => {
   if (!gameState) return null;
 
   const { score } = gameState;
-  
+
   return {
     date: new Date().toISOString(),
-    score: score.correct * 10, 
+    score: score.correct * 10,
     correct: score.correct,
     wrong: score.wrong + (gameState.questions.length - (score.correct + score.wrong)),
-    status: 'Gave Up'
+    status: 'Gave Up',
   };
 };

@@ -10,10 +10,12 @@ function HistoryItem({ game }) {
       <div className="flex flex-col">
         <div className="flex items-center gap-2 text-xs text-gray-400 font-mono mb-1 uppercase tracking-wider">
           <Clock size={12} />
-          {new Date(game.date).toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}
+          {new Date(game.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </div>
         <div className="flex items-baseline gap-2">
-          <span className={`text-2xl font-bold ${isHighScore ? 'text-green-600' : 'text-orange-500'}`}>
+          <span
+            className={`text-2xl font-bold ${isHighScore ? 'text-green-600' : 'text-orange-500'}`}
+          >
             {game.score}
           </span>
           <span className="text-xs text-gray-400 font-medium">pts</span>
@@ -25,7 +27,7 @@ function HistoryItem({ game }) {
           <span className="text-red-400 flex items-center gap-1">✖ {game.wrong}</span>
         </div>
         <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div 
+          <div
             className={`h-full ${isHighScore ? 'bg-green-500' : 'bg-orange-400'}`}
             style={{ width: `${percentage}%` }}
           />
