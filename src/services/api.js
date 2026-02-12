@@ -9,13 +9,13 @@ export const fetchQuestions = async (amount = 10, difficulty = 'medium', categor
         amount: amount,
         category: category,
         difficulty: difficulty,
-        type: 'multiple', // Kita kunci ke multiple choice dulu agar mudah
+        type: 'multiple',
       },
     });
 
     return response.data.results;
   } catch (error) {
-    console.error("Error fetching questions:", error);
-    throw error; // Lempar error agar bisa di-handle di komponen nanti
+    console.error('Error fetching questions:', error);
+    throw error;
   }
 };
