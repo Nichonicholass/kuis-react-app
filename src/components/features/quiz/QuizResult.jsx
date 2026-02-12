@@ -7,7 +7,7 @@ function QuizResult({ score, totalQuestions, category, timeSpent, onRestart, onH
   const correct = score.correct;
   const wrong = score.wrong;
   const answered = correct + wrong;
-  const finalScore = correct * 10;
+  const finalScore = correct * 20;
 
   const grade = useMemo(() => {
     const percentage = (correct / totalQuestions) * 100;

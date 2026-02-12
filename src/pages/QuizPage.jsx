@@ -19,42 +19,62 @@ function QuizPage() {
   const categoryId = location.state?.categoryId || 9;
   const currentCategory = CATEGORIES.find((c) => c.id === categoryId) || CATEGORIES[0];
 
-  const [questions, setQuestions] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [score, setScore] = useState({ correct: 0, wrong: 0 });
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [questions, setQuestions] = useState(() => {
+    const saved = getGameState(user?.username);
+    return saved?.questions || [];
+  });
+  
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    const saved = getGameState(user?.username);
+    return saved?.currentIndex || 0;
+  });
+  
+  const [score, setScore] = useState(() => {
+    const saved = getGameState(user?.username);
+    return saved?.score || { correct: 0, wrong: 0 };
+  });
+
+  const [loading, setLoading] = useState(() => {
+    const saved = getGameState(user?.username);
+    return !saved?.questions;
+  });
+  
+  const [endTime, setEndTime] = useState(() => {
+    const saved = getGameState(user?.username);
+    if (saved?.timeLeft) {
+      return Date.now() + (saved.timeLeft * 1000);
+    }
+    return null;
+  });
+  
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const saved = getGameState(user?.username);
+    return saved?.timeLeft || 60;
+  });
+
   const [isFinished, setIsFinished] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
   const dataFetchedRef = useRef(false);
-
   const TOTAL_TIME = 60;
   const timeSpent = TOTAL_TIME - timeLeft;
 
   useEffect(() => {
-    if (!user) {
-      navigate('/');
-      return;
+    if (!user) { 
+      navigate('/'); 
+      return; 
     }
-
+    
     if (dataFetchedRef.current) return;
-
+    
     const savedState = getGameState(user.username);
-
-    if (savedState) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setQuestions(savedState.questions);
-      setCurrentIndex(savedState.currentIndex);
-      setScore(savedState.score);
-      setTimeLeft(savedState.timeLeft);
-      setLoading(false);
-      dataFetchedRef.current = true;
-    } else {
+    
+    if (!savedState?.questions) {
       const loadData = async () => {
         try {
           const data = await fetchQuestions(5, 'medium', categoryId);
           setQuestions(data);
+          setEndTime(Date.now() + (TOTAL_TIME * 1000));
           setLoading(false);
           dataFetchedRef.current = true;
         } catch (error) {
@@ -63,19 +83,19 @@ function QuizPage() {
         }
       };
       loadData();
+    } else {
+      dataFetchedRef.current = true;
     }
-  }, [categoryId, navigate, user]);
+  }, [categoryId, navigate, user, TOTAL_TIME]);
 
-  // Handler for finishing quiz
-  const handleFinish = useCallback(
-    (lastCorrect = null) => {
+
+  const handleFinish = useCallback((lastCorrect = null) => {
       if (user) clearGameState(user.username);
-
       setIsFinished(true);
 
       const finalCorrect = score.correct + (lastCorrect === true ? 1 : 0);
       const finalWrong = score.wrong + (lastCorrect === false ? 1 : 0);
-      const finalScore = finalCorrect * 10;
+      const finalScore = finalCorrect * 20;
 
       saveGameToHistory({
         date: new Date().toISOString(),
@@ -83,52 +103,52 @@ function QuizPage() {
         correct: finalCorrect,
         wrong: finalWrong,
       });
-    },
-    [user, score]
+    }, [user, score]
   );
 
-  // 2. AUTO SAVE
   useEffect(() => {
-    if (user && !loading && questions.length > 0 && !isFinished) {
+    if (user && !loading && questions.length > 0 && !isFinished && endTime) {
+      
+      const currentSecondsLeft = Math.ceil((endTime - Date.now()) / 1000);
+      
       saveGameState(user.username, {
         questions,
         currentIndex,
         score,
-        timeLeft,
+        timeLeft: currentSecondsLeft, 
         categoryId,
       });
     }
-  }, [questions, currentIndex, score, timeLeft, loading, isFinished, categoryId, user]);
+  }, [questions, currentIndex, score, loading, isFinished, categoryId, user, endTime]);
 
-  // 3. TIMER
+
   useEffect(() => {
-    if (loading || isFinished) return;
+    if (loading || isFinished || !endTime) return;
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleFinish();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+      const now = Date.now();
+      const remainingSeconds = Math.ceil((endTime - now) / 1000);
+
+      if (remainingSeconds <= 0) {
+        setTimeLeft(0);
+        clearInterval(timer);
+        handleFinish();
+      } else {
+        setTimeLeft(remainingSeconds);
+      }
+    }, 200);
 
     return () => clearInterval(timer);
-  }, [loading, isFinished, handleFinish]);
+  }, [loading, isFinished, handleFinish, endTime]);
 
   const handleAnswer = (answer) => {
     if (isExiting) return;
-
     setIsExiting(true);
     const isCorrect = answer === questions[currentIndex].correct_answer;
-
     setScore((prev) => ({
       correct: isCorrect ? prev.correct + 1 : prev.correct,
       wrong: !isCorrect ? prev.wrong + 1 : prev.wrong,
     }));
-
     setTimeout(() => {
       if (currentIndex < questions.length - 1) {
         setCurrentIndex((prev) => prev + 1);
@@ -168,7 +188,6 @@ function QuizPage() {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6 min-h-[70vh] flex flex-col font-sans">
-      {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-3 bg-white dark:bg-dark-card px-4 py-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
           <span className={`${currentCategory.color.replace('text-', 'text-')} text-xl`}>
@@ -181,7 +200,6 @@ function QuizPage() {
         <Timer duration={timeLeft} />
       </div>
 
-      {/* Progress */}
       <div className="mb-2">
         <div className="flex justify-between text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">
           <span>Question {currentIndex + 1}</span>
@@ -195,7 +213,6 @@ function QuizPage() {
         </div>
       </div>
 
-      {/* Quiz Card */}
       <QuizCard
         questionData={questions[currentIndex]}
         onAnswerClick={handleAnswer}
