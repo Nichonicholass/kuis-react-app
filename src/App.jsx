@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
-import Layout from './components/Layout';
-import CustomToaster from './components/Toaster';
+import CustomToaster from './components/common/Toaster';
+import Layout from './components/layout/Layout';
 import useTheme from './hooks/useTheme';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';

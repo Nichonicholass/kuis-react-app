@@ -1,4 +1,4 @@
-import { decodeHtml } from '../utils/decoder';
+import { decodeHtml } from '../../../utils/decoder';
 
 function QuizCard({ questionData, onAnswerClick, isExiting }) {
   if (!questionData) return null;

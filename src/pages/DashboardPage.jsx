@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Ghost, Hand, History, Target } from 'lucide-react';
 
-import Button from '../components/Button';
-import CategoryCard from '../components/CategoryCard';
-import HistoryItem from '../components/HistoryItem';
-import ResumeModal from '../components/ResumeModal';
+import Button from '../components/common/Button';
+import CategoryCard from '../components/features/dashboard/CategoryCard';
+import HistoryItem from '../components/features/dashboard/HistoryItem';
+import ResumeModal from '../components/features/quiz/ResumeModal';
 import { CATEGORIES } from '../constants/categories';
 import { useDashboard } from '../hooks/useDashboard';
 import { saveGameToHistory } from '../services/authService';

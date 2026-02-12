@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Brain, User } from 'lucide-react';
 
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import { login } from '../services/authService';
 
 function LoginPage() {

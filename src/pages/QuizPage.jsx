@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import Loading from '../components/Loading';
-import QuizCard from '../components/QuizCard';
-import QuizResult from '../components/QuizResult';
-import Timer from '../components/Timer';
+import Loading from '../components/common/Loading';
+import QuizCard from '../components/features/quiz/QuizCard';
+import QuizResult from '../components/features/quiz/QuizResult';
+import Timer from '../components/features/quiz/Timer';
 import { CATEGORIES } from '../constants/categories';
 import { fetchQuestions } from '../services/api';
 import { getCurrentUser, saveGameToHistory } from '../services/authService';
@@ -138,8 +138,6 @@ function QuizPage() {
       }
     }, 300);
   };
-
-
 
   const handleBackToDashboard = () => {
     if (user) clearGameState(user.username);

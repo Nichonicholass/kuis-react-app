@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react';
+import { Check, Clock, X } from 'lucide-react';
 
 function HistoryItem({ game }) {
   const total = game.correct + game.wrong;
@@ -23,8 +23,12 @@ function HistoryItem({ game }) {
       </div>
       <div className="text-right w-1/3">
         <div className="flex justify-end gap-3 text-xs font-bold mb-2 opacity-70 group-hover:opacity-100 transition-opacity">
-          <span className="text-green-600 flex items-center gap-1">✔ {game.correct}</span>
-          <span className="text-red-400 flex items-center gap-1">✖ {game.wrong}</span>
+          <span className="text-green-600 flex items-center gap-1">
+            <Check size={14} /> {game.correct}
+          </span>
+          <span className="text-red-400 flex items-center gap-1">
+            <X size={14} /> {game.wrong}
+          </span>
         </div>
         <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div

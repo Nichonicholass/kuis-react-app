@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { CheckCircle, Clock, Hash, Home, RefreshCcw, Trophy, XCircle } from 'lucide-react';
 
-import Button from './Button';
+import Button from '../../common/Button';
 
 function QuizResult({ score, totalQuestions, category, timeSpent, onRestart, onHome }) {
   const correct = score.correct;
