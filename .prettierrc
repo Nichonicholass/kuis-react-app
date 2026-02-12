@@ -7,5 +7,13 @@
   "printWidth": 100,
   "bracketSpacing": true,
   "arrowParens": "always",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^react$",
+    "^react-",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^[./]"
+  ]
 }

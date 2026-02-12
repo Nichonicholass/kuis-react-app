@@ -1,6 +1,7 @@
 import { AlertTriangle, Clock, Hash } from 'lucide-react';
-import Button from './Button';
+
 import { CATEGORIES } from '../constants/categories';
+import Button from './Button';
 
 function ResumeModal({ isOpen, data, onResume, onGiveUp }) {
   if (!isOpen || !data) return null;

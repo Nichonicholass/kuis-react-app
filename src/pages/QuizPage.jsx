@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchQuestions } from '../services/api';
-import QuizCard from '../components/QuizCard';
-import Timer from '../components/Timer';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Loading from '../components/Loading';
-import { CATEGORIES } from '../constants/categories';
-import { getCurrentUser, saveGameToHistory } from '../services/authService';
-import { saveGameState, getGameState, clearGameState } from '../utils/storage';
+import QuizCard from '../components/QuizCard';
 import QuizResult from '../components/QuizResult';
+import Timer from '../components/Timer';
+import { CATEGORIES } from '../constants/categories';
+import { fetchQuestions } from '../services/api';
+import { getCurrentUser, saveGameToHistory } from '../services/authService';
+import { clearGameState, getGameState, saveGameState } from '../utils/storage';
 
 function QuizPage() {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ function QuizPage() {
     const savedState = getGameState(user.username);
 
     if (savedState) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuestions(savedState.questions);
       setCurrentIndex(savedState.currentIndex);
       setScore(savedState.score);
@@ -62,7 +64,28 @@ function QuizPage() {
       };
       loadData();
     }
-  }, [categoryId, navigate]);
+  }, [categoryId, navigate, user]);
+
+  // Handler for finishing quiz
+  const handleFinish = useCallback(
+    (lastCorrect = null) => {
+      if (user) clearGameState(user.username);
+
+      setIsFinished(true);
+
+      const finalCorrect = score.correct + (lastCorrect === true ? 1 : 0);
+      const finalWrong = score.wrong + (lastCorrect === false ? 1 : 0);
+      const finalScore = finalCorrect * 10;
+
+      saveGameToHistory({
+        date: new Date().toISOString(),
+        score: finalScore,
+        correct: finalCorrect,
+        wrong: finalWrong,
+      });
+    },
+    [user, score]
+  );
 
   // 2. AUTO SAVE
   useEffect(() => {
@@ -85,7 +108,7 @@ function QuizPage() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          setIsFinished(true);
+          handleFinish();
           return 0;
         }
         return prev - 1;
@@ -93,13 +116,7 @@ function QuizPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [loading, isFinished]);
-
-  useEffect(() => {
-    if (isFinished && timeLeft === 0) {
-      handleFinish();
-    }
-  }, [isFinished, timeLeft]);
+  }, [loading, isFinished, handleFinish]);
 
   const handleAnswer = (answer) => {
     if (isExiting) return;
@@ -122,22 +139,7 @@ function QuizPage() {
     }, 300);
   };
 
-  const handleFinish = (lastCorrect = null) => {
-    if (user) clearGameState(user.username);
 
-    setIsFinished(true);
-
-    const finalCorrect = score.correct + (lastCorrect === true ? 1 : 0);
-    const finalWrong = score.wrong + (lastCorrect === false ? 1 : 0);
-    const finalScore = finalCorrect * 10;
-
-    saveGameToHistory({
-      date: new Date().toISOString(),
-      score: finalScore,
-      correct: finalCorrect,
-      wrong: finalWrong,
-    });
-  };
 
   const handleBackToDashboard = () => {
     if (user) clearGameState(user.username);

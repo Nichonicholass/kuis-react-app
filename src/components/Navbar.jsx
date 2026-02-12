@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { LogOut, Sun, Moon, Brain } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import Button from './Button';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Brain, LogOut, Moon, Sun } from 'lucide-react';
+
 import { getCurrentUser, logout } from '../services/authService';
+import Button from './Button';
 
 function Navbar({ toggleTheme, isDark }) {
   const navigate = useNavigate();

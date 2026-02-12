@@ -1,4 +1,4 @@
-import { Brain, Monitor, Trophy, ScrollText, Palette, Clapperboard } from 'lucide-react';
+import { Brain, Clapperboard, Monitor, Palette, ScrollText, Trophy } from 'lucide-react';
 
 export const CATEGORIES = [
   {

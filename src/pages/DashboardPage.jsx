@@ -1,16 +1,15 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { History, Target, Ghost, Hand, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Ghost, Hand, History, Target } from 'lucide-react';
 
-import CategoryCard from '../components/CategoryCard';
-import ResumeModal from '../components/ResumeModal';
-import HistoryItem from '../components/HistoryItem';
 import Button from '../components/Button';
-
-import { useDashboard } from '../hooks/useDashboard';
+import CategoryCard from '../components/CategoryCard';
+import HistoryItem from '../components/HistoryItem';
+import ResumeModal from '../components/ResumeModal';
 import { CATEGORIES } from '../constants/categories';
-import { getGameState, clearGameState, calculateGiveUpScore } from '../utils/storage';
+import { useDashboard } from '../hooks/useDashboard';
 import { saveGameToHistory } from '../services/authService';
+import { calculateGiveUpScore, clearGameState, getGameState } from '../utils/storage';
 
 const HISTORY_DISPLAY_LIMIT = 4;
 

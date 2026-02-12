@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Trophy, XCircle, CheckCircle, Clock, Hash, Home, RefreshCcw } from 'lucide-react';
+import { CheckCircle, Clock, Hash, Home, RefreshCcw, Trophy, XCircle } from 'lucide-react';
+
 import Button from './Button';
 
 function QuizResult({ score, totalQuestions, category, timeSpent, onRestart, onHome }) {

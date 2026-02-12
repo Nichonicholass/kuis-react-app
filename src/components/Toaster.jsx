@@ -1,4 +1,5 @@
 import { Toaster } from 'react-hot-toast';
+
 import useTheme from '../hooks/useTheme';
 
 function CustomToaster({ offset = 90 }) {

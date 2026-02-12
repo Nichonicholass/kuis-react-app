@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Brain, User, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Brain, User } from 'lucide-react';
 
 import Button from '../components/Button';
 import { login } from '../services/authService';

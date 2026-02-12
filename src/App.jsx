@@ -1,11 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
-import useTheme from './hooks/useTheme';
-import Layout from './components/Layout';
+import { Route, Routes } from 'react-router-dom';
 
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import QuizPage from './pages/QuizPage';
+import Layout from './components/Layout';
 import CustomToaster from './components/Toaster';
+import useTheme from './hooks/useTheme';
+import DashboardPage from './pages/DashboardPage';
+import LoginPage from './pages/LoginPage';
+import QuizPage from './pages/QuizPage';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
