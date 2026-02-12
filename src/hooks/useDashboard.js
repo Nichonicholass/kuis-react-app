@@ -1,20 +1,16 @@
-// src/hooks/useDashboard.js
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, logout } from '../services/authService';
 
 export const useDashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => getCurrentUser());
 
   useEffect(() => {
-    const currentUser = getCurrentUser();
-    if (!currentUser) {
+    if (!user) {
       navigate('/');
-    } else {
-      setUser(currentUser);
     }
-  }, [navigate]);
+  }, [navigate, user]);
 
   const handleLogout = () => {
     logout();
@@ -27,6 +23,7 @@ export const useDashboard = () => {
 
   return {
     user,
+    setUser, 
     handleLogout,
     handleStartQuiz
   };

@@ -1,18 +1,10 @@
-// src/utils/storage.js
-
-// KITAU UBAH JADI PREFIX, BUKAN KEY TETAP
 const KEY_GAME_PREFIX = 'quiz_game_state_';
 
-// Helper untuk bikin key unik: "quiz_game_state_nicholas"
 const getGameKey = (username) => `${KEY_GAME_PREFIX}${username}`;
 
-// --- Management Game State ---
-
-// TERIMA PARAMETER USERNAME
 export const saveGameState = (username, state) => {
   if (!username) return;
   const key = getGameKey(username);
-  // Kita simpan username di dalam objek juga untuk validasi ganda (opsional tapi bagus)
   const dataToSave = { ...state, owner: username };
   localStorage.setItem(key, JSON.stringify(dataToSave));
 };

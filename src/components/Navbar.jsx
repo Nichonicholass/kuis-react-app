@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { useState, useEffect } from 'react';
 import { LogOut, Sun, Moon, Brain } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -10,30 +9,24 @@ function Navbar({ toggleTheme, isDark }) {
   const location = useLocation();
   const user = getCurrentUser(); 
 
-  // --- LOGIC SCROLL ANIMATION ---
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const controlNavbar = () => {
-      // Ambil posisi scroll saat ini
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        // Kalau scroll ke BAWAH dan sudah lewat 50px -> Sembunyikan
         setShowNavbar(false);
       } else {
-        // Kalau scroll ke ATAS -> Tampilkan
         setShowNavbar(true);
       }
 
-      // Simpan posisi scroll terakhir
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', controlNavbar);
 
-    // Bersihkan event listener saat komponen di-unmount (biar ga memory leak)
     return () => {
       window.removeEventListener('scroll', controlNavbar);
     };
@@ -59,7 +52,6 @@ function Navbar({ toggleTheme, isDark }) {
       `}
     >
       
-      {/* LOGO */}
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white shadow-orange-200">
           <Brain size={20} />
@@ -69,9 +61,7 @@ function Navbar({ toggleTheme, isDark }) {
         </h1>
       </div>
       
-      {/* ACTION AREA */}
       <div className="flex items-center gap-3">
-        {/* Toggle Theme */}
         <Button 
           onClick={toggleTheme}
           className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -79,7 +69,6 @@ function Navbar({ toggleTheme, isDark }) {
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </Button>
 
-        {/* LOGOUT BUTTON */}
         {user && !isLoginPage && (
           <>
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-1 hidden sm:block"></div>

@@ -1,9 +1,8 @@
-// src/components/CustomToaster.jsx
 import { Toaster } from 'react-hot-toast';
-import useTheme from '../hooks/useTheme'; // Asumsi kamu punya hook ini, atau oper via props
+import useTheme from '../hooks/useTheme';
 
 function CustomToaster({ offset = 90 }) {
-  const { theme } = useTheme(); // Ambil tema otomatis
+  const { theme } = useTheme();
   const isDark = theme === 'dark';
 
   return (
@@ -11,15 +10,15 @@ function CustomToaster({ offset = 90 }) {
       position="top-center" 
       reverseOrder={false}
       containerStyle={{
-        top: offset, // Bisa diatur lewat props (default 90px buat hindari Navbar)
+        top: offset,
         zIndex: 99999,
       }}
       toastOptions={{
-        duration: 3000, // Durasi default 3 detik
+        duration: 3000,
         style: {
-          background: isDark ? '#292524' : '#fff', // Stone-800 vs White
+          background: isDark ? '#292524' : '#fff',
           color: isDark ? '#fff' : '#1C1917',
-          borderRadius: '16px', // Lebih bulat
+          borderRadius: '16px',
           padding: '12px 20px',
           boxShadow: '0px 10px 30px -10px rgba(0,0,0,0.2)',
           border: isDark ? '1px solid #444' : '1px solid #f3f4f6',
@@ -28,13 +27,13 @@ function CustomToaster({ offset = 90 }) {
         },
         success: {
           iconTheme: {
-            primary: '#F97316', // Orange Theme
+            primary: '#F97316',
             secondary: 'white',
           },
         },
         error: {
           iconTheme: {
-            primary: '#EF4444', // Red
+            primary: '#EF4444',
             secondary: 'white',
           },
         },

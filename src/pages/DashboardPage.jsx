@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { History, Target, Ghost, Hand, ChevronDown, ChevronUp, Clock } from 'lucide-react';
+import { History, Target, Ghost, Hand, ChevronDown, ChevronUp } from 'lucide-react';
 
 import CategoryCard from '../components/CategoryCard';
 import ResumeModal from '../components/ResumeModal'; 
@@ -12,43 +12,61 @@ import { CATEGORIES } from '../constants/categories';
 import { getGameState, clearGameState, calculateGiveUpScore } from '../utils/storage';
 import { saveGameToHistory } from '../services/authService';
 
+const HISTORY_DISPLAY_LIMIT = 4;
+
 function DashboardPage() {
-  const { user, handleStartQuiz } = useDashboard();
+  const { user, handleStartQuiz, setUser } = useDashboard();
   const [showAllHistory, setShowAllHistory] = useState(false);
   const navigate = useNavigate();
 
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [resumeData, setResumeData] = useState(null);
 
-  // 1. CEK STATE SAAT LOAD
   useEffect(() => {
     if (!user) return;
     const savedState = getGameState(user.username);
     if (savedState && savedState.questions && savedState.currentIndex < savedState.questions.length) {
-      setResumeData(savedState);
-      setShowResumeModal(true);
+      const timeoutId = setTimeout(() => {
+        setResumeData(savedState);
+        setShowResumeModal(true);
+      }, 0);
+      
+      return () => clearTimeout(timeoutId);
     }
-  }, [user?.username]);
+  }, [user]);
 
-  const handleResumeGame = () => {
+  const handleResumeGame = useCallback(() => {
     navigate('/quiz');
-  };
+  }, [navigate]);
 
-  const handleGiveUp = () => {
+  const handleGiveUp = useCallback(() => {
     if (!user) return;
     const savedState = getGameState(user.username);
     if (savedState) {
       const finalResult = calculateGiveUpScore(savedState);
       saveGameToHistory(finalResult);
       clearGameState(user.username);
-      window.location.reload();
+      setShowResumeModal(false);
+      setResumeData(null);
+      const newHistory = [finalResult, ...(user.history || [])];
+    
+    setUser({
+      ...user,
+      history: newHistory
+    });
     }
-  };
+  }, [user, setUser]);
+
+  const displayedHistory = useMemo(() => {
+    if (!user?.history) return [];
+    return showAllHistory ? user.history : user.history.slice(0, HISTORY_DISPLAY_LIMIT);
+  }, [user, showAllHistory]);
+
+  const hasMoreHistory = useMemo(() => {
+    return (user?.history?.length ?? 0) > HISTORY_DISPLAY_LIMIT;
+  }, [user]);
 
   if (!user) return null;
-
-  const displayedHistory = showAllHistory ? user.history : user.history.slice(0, 4);
-  const hasMoreHistory = user.history.length > 4;
 
   return (
     <div className="w-full min-h-screen font-sans transition-colors duration-300">
@@ -59,7 +77,6 @@ function DashboardPage() {
         onGiveUp={handleGiveUp} 
       />
       <main className="max-w-5xl mx-auto px-6 py-8">
-        {/* --- HEADER --- */}
         <header className="mb-10 text-center md:text-left" data-aos="fade-right">
              <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-2 flex items-center justify-center md:justify-start gap-3">
             Hello, <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">{user.username}</span>
@@ -70,7 +87,7 @@ function DashboardPage() {
           </p>
         </header>
 
-        {/* --- SECTION 1: CATEGORIES --- */}
+        {/* --- SECTION: CATEGORIES --- */}
         <section className="mb-12">
              <div className="flex items-center gap-2 mb-6 border-l-4 border-orange-500 pl-4" data-aos="fade-right" data-aos-delay="100">
             <Target className="text-orange-500" />
@@ -82,7 +99,7 @@ function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {CATEGORIES.map((cat, index) => (
               <div 
-                key={cat.id || 'random'} 
+                key={cat.id || `category-${index}`} 
                 data-aos="zoom-in"
                 data-aos-delay={index * 100}
                 className={showResumeModal ? 'pointer-events-none opacity-50 filter blur-sm' : ''}
@@ -96,7 +113,7 @@ function DashboardPage() {
           </div>
         </section>
 
-        {/* --- SECTION 2: HISTORY --- */}
+        {/* --- SECTION: HISTORY --- */}
         <section>
              <div className="flex items-center justify-between mb-6 border-l-4 border-gray-400 pl-4" data-aos="fade-right" data-aos-offset="50">
             <div className="flex items-center gap-2">
@@ -122,7 +139,7 @@ function DashboardPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {displayedHistory.map((game, index) => (
-                  <HistoryItem key={index} game={game} />
+                  <HistoryItem key={game.timestamp || `history-${index}`} game={game} />
                 ))}
               </div>
             )}

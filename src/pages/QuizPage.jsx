@@ -6,7 +6,7 @@ import QuizCard from '../components/QuizCard';
 import Timer from '../components/Timer';
 import Loading from '../components/Loading'; // IMPORT BARU
 import { CATEGORIES } from '../constants/categories'; 
-import { getCurrentUser, logout, saveGameToHistory } from '../services/authService';
+import { getCurrentUser, saveGameToHistory } from '../services/authService';
 import { saveGameState, getGameState, clearGameState } from '../utils/storage';
 import QuizResult from '../components/QuizResult';
 

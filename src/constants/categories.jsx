@@ -1,4 +1,3 @@
-// src/constants/categories.jsx
 import { 
   Brain, 
   Monitor, 
@@ -6,10 +5,8 @@ import {
   ScrollText, 
   Palette, 
   Clapperboard, 
-  Dices 
 } from 'lucide-react';
 
-// Kita set size={32} agar ukurannya pas di dalam lingkaran kartu
 export const CATEGORIES = [
   { 
     id: 9, 
